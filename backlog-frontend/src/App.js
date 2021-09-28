@@ -1,7 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+	const [ game, setGame ] = useState([]);
+
 	// const requestOptions = {
 	// 	method: 'POST',
 	// 	headers: { 'Content-Type': 'application/json' },
@@ -18,7 +21,7 @@ function App() {
 	// 	.then((response) => response.json())
 	// 	.then((data) => console.log(data));
 
-	fetch(' https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/search', {
+	fetch(' https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games', {
 		method: 'POST',
 		// mode: 'no-cors',
 		// credentials: 'same-origin',
@@ -27,22 +30,17 @@ function App() {
 			'Client-ID': 'qo929iiu0q6pa38ydrfdxj37li80a9',
 			Authorization: 'Bearer a5301d0q3f2p8cin945szap6feme04'
 		},
-		body: JSON.stringify({ alternative_name: 'Mario' })
+		body: 'search "Witcher";  fields name, status;'
 	})
 		.then((response) => response.json())
 		.then((data) => console.log(data));
 
+	console.log(game);
+
 	return (
 		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-					Learn React
-				</a>
-			</header>
+			<Login />
+      <Gamecontainer />
 		</div>
 	);
 }
