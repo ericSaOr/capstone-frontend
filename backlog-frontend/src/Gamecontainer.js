@@ -1,9 +1,6 @@
 function Gamecontainer() {
 	return (
-		<div>
-			<Sidebar />
-			<Cardeditor />
-		</div>
+		<div>0</div>
 	);
 }
 
