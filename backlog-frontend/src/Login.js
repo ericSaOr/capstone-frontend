@@ -16,7 +16,6 @@ function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user }) {
 			.then((response) => response.json())
 			.then((user) => {
 				handleLogin(user);
-				setLoggedIn(true);
 			});
 	}
 
@@ -25,7 +24,6 @@ function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user }) {
 			method: 'DELETE'
 		}).then(() => {
 			handleLogout();
-			setLoggedIn(false);
 		});
 	}
 	console.log(loggedIn);

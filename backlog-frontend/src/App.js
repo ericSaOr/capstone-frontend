@@ -1,17 +1,19 @@
 import './App.css';
 import Login from './Login';
-import Signup from './Signup';
-import Search from './Search';
-import Gamecontainer from './Gamecontainer';
-import Sidebar from './Sidebar';
-import Cardeditor from './Cardeditor';
 import Navbar from './Navbar';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
 	const [ user, setUser ] = useState(null);
 	const [ loggedIn, setLoggedIn ] = useState(false);
+
+	useEffect(() => {
+		fetch('/me').then((response) => {
+			if (response.ok) {
+				response.json().then((userData) => setUser(userData));
+			}
+		});
+	}, []);
 
 	function handleLogin(user) {
 		setUser(user);
