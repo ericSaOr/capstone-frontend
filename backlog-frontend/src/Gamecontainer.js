@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 function Gamecontainer({ user }) {
 	const [ gamecards, setGamecards ] = useState([]);
-	const [ editButton, setEditButton ] = useState(false);
-	const [ Image, setImage ] = useState('');
-	const [ levelData, setLevelData ] = useState('');
-	const [ userID, setUserId ] = useState(0);
+	// const [ setEditButton ] = useState(false);
+	const [ setImage ] = useState('');
+	const [ setLevelData ] = useState('');
+	const [ setUserId ] = useState(0);
 
 	useEffect(() => {
 		fetch('/gamecards').then((res) => res.json()).then((gamesData) => {
