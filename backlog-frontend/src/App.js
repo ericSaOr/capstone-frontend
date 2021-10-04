@@ -1,34 +1,26 @@
 import './App.css';
 import Login from './Login';
 import Navbar from './Navbar';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function App() {
 	const [ user, setUser ] = useState(null);
 	const [ loggedIn, setLoggedIn ] = useState(false);
 
-	useEffect(() => {
-		fetch('/me').then((response) => {
-			if (response.ok) {
-				response.json().then((userData) => setUser(userData));
-			}
-		});
-	}, []);
-
 	function handleLogin(user) {
 		setUser(user);
 	}
 
-	function handleLogout() {
-		setUser(null);
-	}
+	// function handleLogout() {
+	// 	setUser(null);
+	// }
 
 	return (
 		<div>
 			<Navbar loggedIn={loggedIn} user={user} />
 			<Login
 				handleLogin={handleLogin}
-				handleLogout={handleLogout}
+				// handleLogout={handleLogout}
 				user={user}
 				loggedIn={loggedIn}
 				setLoggedIn={setLoggedIn}

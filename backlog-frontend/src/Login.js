@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import Search from './Search';
 
-function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user }) {
+function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user, games, search }) {
 	const [ username, setUsername ] = useState('');
+
+	
 
 	function handleSubmit(e) {
 		e.preventDefault();
 		fetch('/login', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				 Accept: 'application/json'
 			},
 			body: JSON.stringify({ user_name: username })
 		})
