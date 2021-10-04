@@ -1,29 +1,66 @@
 import React, { useState, useEffect } from 'react';
 
-function Gamecontainer({ user }) {
-	const [ gamecards, setGamecards ] = useState([]);
+function Gamecontainer({ user, singleGame }) {
+	const [ gamecards, setGamecards ] = useState(null);
 	// const [ setEditButton ] = useState(false);
-	const [ setImage ] = useState('');
-	const [ setLevelData ] = useState('');
-	const [ setUserId ] = useState(0);
+	const [ image, setImage ] = useState('');
+	const [ levelData, setLevelData ] = useState('');
+	const [ userId, setUserId ] = useState(0);
+	const [ credPoints, setCredPoints ] = useState(0);
+
+	// useEffect(() => {
+	// 	fetch('/gamecards').then((res) => res.json()).then((gamesData) => {
+	// 		setGamecards(gamesData);
+	// 	});
+	// }, []);
+
+	function incrementCredPoints(e, id) {
+		fetch(`/users/${id}/cred_points`, {
+			method: 'PATCH',
+			header: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				id: user.id,
+				cred_points: credPoints
+			})
+		})
+			.then((response) => response.json())
+			.then((credPoint) => setCredPoints(credPoint));
+	}
 
 	useEffect(() => {
-		fetch('/gamecards').then((res) => res.json()).then((gamesData) => {
-			setGamecards(gamesData);
-		});
+		fetch('/gamecards', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				image: singleGame.image,
+				level_data: singleGame.title,
+				user_id: user.id,
+				game_id: singleGame.id
+			})
+		}) //this is wrong which gamecard am I using? Which level_data? Fix in the morning.
+			.then((response) => response.json())
+			.then((newGamecard) => {
+				console.log('FETCH FIRED', newGamecard);
+				setGamecards((gamecard) => newGamecard);
+			});
 	}, []);
 
 	function editGame(e) {
+		console.log('EDIT GAME FIRED', singleGame);
 		e.preventDefault();
-		fetch('/gamecards/:id', {
+		fetch(`/gamecards/${gamecards.id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				image: gamecards.Image,
-				level_data: gamecards.levelData,
-				user_id: gamecards.user_id
+				image: image,
+				level_data: levelData,
+				user_id: user.id
 			})
 		})
 			.then((response) => response.json())
@@ -41,10 +78,6 @@ function Gamecontainer({ user }) {
 		return setLevelData(e.target.value);
 	}
 
-	function inputID(e) {
-		e.preventDefault();
-		return setUserId(e.target.value);
-	}
 	function addGameCard(e) {
 		e.preventDefault();
 		fetch('/gamecards', {
@@ -53,46 +86,83 @@ function Gamecontainer({ user }) {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				image: gamecards.image,
-				level_data: gamecards.level_data,
-				user_id: gamecards.user_id
+				image: image,
+				level_data: levelData,
+				user_id: user.id,
+				game_id: singleGame.id
 			})
 		}) //this is wrong which gamecard am I using? Which level_data? Fix in the morning.
 			.then((response) => response.json())
 			.then((newGamecard) => {
-				setGamecards((gamecard) => [ ...gamecard, newGamecard ]);
+				setGamecards((gamecard) => newGamecard);
+			});
+	}
+
+	function handleGCdelete(id) {
+		console.log('STRING ID FROM GCDELETE', id);
+		fetch(`/gamecards/${id}`, {
+			method: 'DELETE'
+		})
+			.then((r) => r.json())
+			.then((deletedGCs) => {
+				setGamecards((prevGC) => {
+					const copyGamecards = [ ...prevGC ];
+					const index = copyGamecards.findIndex((gc) => deletedGCs.user_id === gc.user_id);
+					console.log('INDEX FROM DELETE REQUEST', index);
+					copyGamecards.splice(index, 1);
+					return copyGamecards;
+				});
 			});
 	}
 
 	function getGamecards() {
-		return gamecards.map((gc) => (
+		return (
 			<div>
-				<img key={gc.user_id} src={gc.image} alt={''} />
-				<p>{gc.level_data}</p>
+				<img src={gamecards.image} alt={''} />
+				<p>{gamecards.level_data}</p>
 				<div>
 					<form onSubmit={editGame}>
-						<input onChange={() => inputImage} type="text" name="add game image" />
-						<input onChange={() => inputLevelData} type="text" name="Add note" />
-						<input onChange={() => inputID} type="number" name="add user ID" />
+						<input onChange={inputImage} type="text" name="add game image" />
+						<input onChange={inputLevelData} type="text" name="Add note" />
 						<div className="button-row">
 							<input type="submit" />
 						</div>
 					</form>
+					<button onClick={() => handleGCdelete(gamecards.user_id)}>Delete</button>
 				</div>
 			</div>
-		));
+		);
+
+
+		
+		// return gamecards.map((gc) => (<singleGame />
+		// 	<div>
+		// 		<img key={gc.user_id} src={gc.image} alt={''} />
+		// 		<p>{gc.level_data}</p>
+
+		// 		<div>
+		// 			<form onSubmit={editGame}>
+		// 				<input onChange={inputImage} type="text" name="add game image" />
+		// 				<input onChange={inputLevelData} type="text" name="Add note" />
+		// 				<div className="button-row">
+		// 					<input type="submit" />
+		// 				</div>
+		// 			</form>
+		// 			<button onClick={() => handleGCdelete(gc.user_id)}>Delete</button>
+		// 		</div>
+		// 	</div>
+		// ));
 	}
 
 	// :image, :level_data, :note
 
 	return (
 		<div>
-			{getGamecards()}
+			{gamecards ? getGamecards() : 'LOADING...'}
 
 			<form onSubmit={addGameCard}>
 				<input onChange={() => inputImage} type="text" name="add gamecard image" />
 				<input onChange={() => inputLevelData} type="text" name="add level data" />
-				<input onChange={() => inputID} type="number" name="add user_id" />
 				<input type="submit" />
 			</form>
 		</div>

@@ -21,16 +21,9 @@ function Search({ user }) {
 		return games.map((g) => (
 			<div>
 				<p>{g.title}</p>
-				<img
-					key={g.id}
-					src={g.image}
-					alt={''}
-					onClick={() => {
-						setIsClicked(true);
-					}}
-				/>
+				<img key={g.id} src={g.image} alt={''} />
 				<button onClick={() => handleDelete(g.id)}>Delete</button>
-				<button onClick={getClickedGame}>Add Game</button>
+				<button onClick={() => getClickedGame(g.id)}>Add Game</button>
 			</div>
 		));
 	}
@@ -52,8 +45,10 @@ function Search({ user }) {
 	}
 
 	function getClickedGame(id) {
-		fetch(`/games/${id}`).then((res) => res.json()).then((game) => {
+		console.log('GET CLICKED GAME', id);
+		fetch(`/show/${id}`).then((res) => res.json()).then((game) => {
 			setSingleGame(game);
+			setIsClicked(true);
 		});
 	}
 	console.log(singleGame);
@@ -90,7 +85,7 @@ function Search({ user }) {
 	}
 
 	if (isClicked === true) {
-		return <Gamecontainer />;
+		return <Gamecontainer singleGame={singleGame} user={user} />;
 	}
 
 	return (

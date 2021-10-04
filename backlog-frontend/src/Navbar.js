@@ -4,7 +4,9 @@ function Navbar({ user, onLogout }) {
 	if (user) {
 		return (
 			<div>
-				<h2>Welcome, UserName: {user.user_name} ID:{user.id}!</h2>
+				<h2>
+					Welcome, UserName: {user.user_name} CredPoints: {user.cred_points}!
+				</h2>
 				<button onClick={onLogout}>Log Out</button>
 			</div>
 		);
