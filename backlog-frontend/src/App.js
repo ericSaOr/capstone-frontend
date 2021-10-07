@@ -2,29 +2,34 @@ import './App.css';
 import Login from './Login';
 import Navbar from './Navbar';
 import React, { useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 function App() {
 	const [ user, setUser ] = useState(null);
 	const [ loggedIn, setLoggedIn ] = useState(false);
-
+	document.body.style.backgroundColor = '#d5e2e3';
 	function handleLogin(user) {
 		setUser(user);
 	}
 
-	// function handleLogout() {
-	// 	setUser(null);
-	// }
+	function handleLogout() {
+		setUser(null);
+	}
 
 	return (
 		<div>
-			<Navbar loggedIn={loggedIn} user={user} />
-			<Login
-				handleLogin={handleLogin}
-				// handleLogout={handleLogout}
-				user={user}
-				loggedIn={loggedIn}
-				setLoggedIn={setLoggedIn}
-			/>
+			<Navbar loggedIn={loggedIn} handleLogout={handleLogout} user={user} />
+			<Switch>
+				<Route exact path="/">
+					<Login
+						handleLogin={handleLogin}
+						handleLogout={handleLogout}
+						user={user}
+						loggedIn={loggedIn}
+						setLoggedIn={setLoggedIn}
+					/>
+				</Route>
+			</Switch>
 		</div>
 	);
 }

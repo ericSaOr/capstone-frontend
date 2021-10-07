@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Search from './Search';
+import './App.css';
 
-function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user, games, search }) {
+function Login({ handleLogin, loggedIn, setLoggedIn, user, games }) {
 	const [ username, setUsername ] = useState('');
-
-	
+	const [ password, setPassword ] = useState('');
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -12,9 +12,10 @@ function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user, games, 
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				 Accept: 'application/json'
+				Accept: 'application/json',
+				credentials: 'include'
 			},
-			body: JSON.stringify({ user_name: username })
+			body: JSON.stringify({ user_name: username, password: password })
 		})
 			.then((response) => response.json())
 			.then((user) => {
@@ -22,23 +23,22 @@ function Login({ handleLogin, handleLogout, loggedIn, setLoggedIn, user, games, 
 			});
 	}
 
-	function onLogout() {
-		fetch('/logout', {
-			method: 'DELETE'
-		}).then(() => {
-			handleLogout();
-		});
-	}
 	console.log(loggedIn);
 	if (user) {
-		return <Search user={user} onLogout={onLogout} />;
+		return <Search user={user} />;
 	}
 	return (
-		<form onSubmit={handleSubmit}>
-			<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-			<button type="submit">Login</button>
-			<button onClick={onLogout}>Logout</button>
-		</form>
+		<div className="Log-in">
+			<form onSubmit={handleSubmit}>
+				<p>Username</p>
+				<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+				<br />
+				<p></p>
+				<button className="login-button" type="submit">
+					Login
+				</button>
+			</form>
+		</div>
 	);
 }
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Gamecontainer from './Gamecontainer';
-import { Route, Switch, History } from 'react-router-dom';
-import './App.css';
+import Gamecards from './Gamecards';
+import {Route, Switch, History} from "react-router-dom"
 
-function Search({ user }) {
+function Games({ user }) {
 	const [ games, setGames ] = useState([]);
 	const [ image, setImage ] = useState('');
 	const [ title, setTitle ] = useState('');
@@ -19,14 +18,19 @@ function Search({ user }) {
 
 	function getGames() {
 		return games.map((g) => (
-			<div className="Game-List">
+			<div>
 				<p>{g.title}</p>
-				<img className="img" key={g.id} src={g.image} alt={''} />
-				<p />
-				<div className="Game-list-buttons">
-					<button onClick={() => handleDelete(g.id)}>Delete</button>
-					<button onClick={() => getClickedGame(g.id)}>Add Game</button>
+				<img key={g.id} src={g.image} alt={''} />
+				<button onClick={() => handleDelete(g.id)}>Delete</button>
+				<button onClick={() => getClickedGame(g.id)}>Add Game</button>
+
+				<form onSubmit={addGame}>
+				<input onChange={setImageInput} type="text" name="add game image" />
+				<input onChange={setTitleInput} type="text" name="Add game title" />
+				<div className="button-row">
+					<input type="submit" />
 				</div>
+			</form>
 			</div>
 		));
 	}
@@ -82,29 +86,14 @@ function Search({ user }) {
 	}
 
 	if (isClicked === true) {
-		return <Gamecontainer singleGame={singleGame} user={user} />;
+
+		return <Gamecards singleGame={singleGame} user={user} />;
 	}
 
-	return (
-		<div>
-			<h2>Pick from the available games</h2>
-
-			{getGames()}
-			<div className="add-game-form">
-				<h3>Add a Game</h3>
-				<form onSubmit={addGame}>
-					<p>Paste a URL for your game.</p>
-					<input onChange={setImageInput} type="text" name="add game image" />
-					<p>Type in a game title.</p>
-					<input onChange={setTitleInput} type="text" name="Add game title" />
-					<div className="button-row">
-						<p />
-						<input type="submit" />
-					</div>
-				</form>
-			</div>
-		</div>
-	);
+	return {getGames()}
+	
+	
+	
 }
 
-export default Search;
+export default Games;

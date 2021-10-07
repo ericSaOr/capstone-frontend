@@ -1,38 +1,67 @@
-.App {
+
+
+.app {
+  background-color: violet;
+}
+
+.Title{
+  margin: auto;
+  width: 50%;
+  height: 50%;
+  border: 3px solid lightyellow;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: lightyellow;
+  text-align: center;
+  font-family:Arial, Helvetica, sans-serif ;
+}
+
+
+.Game-List{
+  border: 1px transparent #ddd;
+  max-width: 25%;
+  height: auto;
+  border-radius: 8px;
+  text-align: center;
+  display: inline-block;
+  margin: 10px;
+  
+  
+  
+  
+}
+
+.img{
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 10px;
+  display: block;
+
+  
+}
+
+.Log-in{
+  display: block;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Game-list-buttons{
+  margin-left: 5px;
+  padding-left: 5px;
+  display: inline-block;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.add-game-form{
+  display: block;
+  text-align: center;
+
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.level-image{
+  width: 600px;
+  height: 400px;
+  margin: 10px;
+  border-radius: 8px;
 }

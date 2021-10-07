@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 
 function Gamecontainer({ user, singleGame }) {
 	const [ gamecards, setGamecards ] = useState(null);
 	// const [ setEditButton ] = useState(false);
 	const [ image, setImage ] = useState('');
 	const [ levelData, setLevelData ] = useState('');
-	const [ userId, setUserId ] = useState(0);
 	const [ credPoints, setCredPoints ] = useState(0);
 
-	// useEffect(() => {
-	// 	fetch('/gamecards').then((res) => res.json()).then((gamesData) => {
-	// 		setGamecards(gamesData);
-	// 	});
-	// }, []);
-
-	function incrementCredPoints(e, id) {
+	function incrementCredPoints(id) {
 		fetch(`/users/${id}/cred_points`, {
 			method: 'PATCH',
 			header: {
@@ -98,75 +92,30 @@ function Gamecontainer({ user, singleGame }) {
 			});
 	}
 
-	function handleGCdelete(id) {
-		console.log('STRING ID FROM GCDELETE', id);
-		fetch(`/gamecards/${id}`, {
-			method: 'DELETE'
-		})
-			.then((r) => r.json())
-			.then((deletedGCs) => {
-				setGamecards((prevGC) => {
-					const copyGamecards = [ ...prevGC ];
-					const index = copyGamecards.findIndex((gc) => deletedGCs.user_id === gc.user_id);
-					console.log('INDEX FROM DELETE REQUEST', index);
-					copyGamecards.splice(index, 1);
-					return copyGamecards;
-				});
-			});
-	}
-
 	function getGamecards() {
 		return (
-			<div>
-				<img src={gamecards.image} alt={''} />
+			<div className="Gamecard-Container">
+				<h2>{singleGame.title}</h2>
+				<img className="img" src={singleGame.image} />
+				<img className="level-image" src={gamecards.image} alt={''} />
 				<p>{gamecards.level_data}</p>
-				<div>
+				<div className="Edit-Gamecard">
 					<form onSubmit={editGame}>
+						<p>Paste URL of your level</p>
 						<input onChange={inputImage} type="text" name="add game image" />
-						<input onChange={inputLevelData} type="text" name="Add note" />
+						<p />
+						<p>Type your note for this level</p>
+						<input className="Note-Input" onChange={inputLevelData} type="text" name="Add note" />
 						<div className="button-row">
 							<input type="submit" />
 						</div>
 					</form>
-					<button onClick={() => handleGCdelete(gamecards.user_id)}>Delete</button>
 				</div>
 			</div>
 		);
-
-
-		
-		// return gamecards.map((gc) => (<singleGame />
-		// 	<div>
-		// 		<img key={gc.user_id} src={gc.image} alt={''} />
-		// 		<p>{gc.level_data}</p>
-
-		// 		<div>
-		// 			<form onSubmit={editGame}>
-		// 				<input onChange={inputImage} type="text" name="add game image" />
-		// 				<input onChange={inputLevelData} type="text" name="Add note" />
-		// 				<div className="button-row">
-		// 					<input type="submit" />
-		// 				</div>
-		// 			</form>
-		// 			<button onClick={() => handleGCdelete(gc.user_id)}>Delete</button>
-		// 		</div>
-		// 	</div>
-		// ));
 	}
 
-	// :image, :level_data, :note
-
-	return (
-		<div>
-			{gamecards ? getGamecards() : 'LOADING...'}
-
-			<form onSubmit={addGameCard}>
-				<input onChange={() => inputImage} type="text" name="add gamecard image" />
-				<input onChange={() => inputLevelData} type="text" name="add level data" />
-				<input type="submit" />
-			</form>
-		</div>
-	);
+	return <div>{gamecards ? getGamecards() : 'LOADING...'}</div>;
 }
 
 export default Gamecontainer;
